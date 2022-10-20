@@ -14,7 +14,6 @@ from pyspark.sql import SparkSession
 spark = SparkSession.builder.appName("bitcoin_pyspark_kraken_json").getOrCreate()
 spark
 ```
-
 ```
 resp = requests.get('https://api.kraken.com/0/public/OHLC?pair=XBTUSD&interval=1440&since=unix_now').json()
 btc_json = resp['result']['XXBTZUSD']
@@ -32,7 +31,7 @@ btc_spark_df = btc_spark_df.withColumnRenamed('_1', "date")\
 btc_spark_df = btc_spark_df.withColumn("date", F.from_unixtime(F.col("date"), 'yyyy-MM-dd').cast("date"))
 btc_spark_df.orderBy(btc_spark_df.date.desc()).show(5)
  ```
- ![png](images/btc_close_line.png)
+ ![png](images/btc_pyspark_daily.png)
  ```
 sql_df.createOrReplaceTempView("btc_sql2")
 spark.sql("""
@@ -50,5 +49,5 @@ GROUP BY year
 ORDER BY AVG(close) DESC
 """).show()
  ```
-
+ ![png](images/btc_pyspark_sql.png)
 
