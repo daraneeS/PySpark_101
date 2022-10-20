@@ -32,6 +32,7 @@ btc_spark_df = btc_spark_df.withColumn("date", F.from_unixtime(F.col("date"), 'y
 btc_spark_df.orderBy(btc_spark_df.date.desc()).show(5)
  ```
  ![png](images/btc_pyspark_daily.png)
+ ![png](images/btc_pyspark_filter.png)
  ```
 sql_df.createOrReplaceTempView("btc_sql2")
 spark.sql("""
