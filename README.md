@@ -32,6 +32,23 @@ btc_spark_df = btc_spark_df.withColumnRenamed('_1', "date")\
 btc_spark_df = btc_spark_df.withColumn("date", F.from_unixtime(F.col("date"), 'yyyy-MM-dd').cast("date"))
 btc_spark_df.orderBy(btc_spark_df.date.desc()).show(5)
  ```
- 
+ ![png](images/btc_close_line.png)
+ ```
+sql_df.createOrReplaceTempView("btc_sql2")
+spark.sql("""
+SELECT year, 
+       ROUND(AVG(open), 2) as avg_open,
+       ROUND(AVG(high), 2) as avg_high,
+       ROUND(AVG(low),  2) as avg_low,
+       ROUND(AVG(close),2) as avg_close,
+       ROUND(MIN(close),2) as min_close,
+       ROUND(MAX(close),2) as max_close,
+       ROUND(AVG(volume),2)as avg_volume,
+       ROUND(AVG(trades),2)as avg_trades
+FROM btc_sql2
+GROUP BY year
+ORDER BY AVG(close) DESC
+""").show()
+ ```
 
 
